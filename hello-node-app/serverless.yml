@@ -1,0 +1,63 @@
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: tsanghan-ce6-serverless-app
+
+frameworkVersion: '4'
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: ap-southeast-1
+  s3:
+    myBucket:
+      name: tsanghan-ce6-serverless-s3-bucket
+
+functions:
+  hello:
+    handler: index.hello
+    events:
+      - httpApi:
+          path: /hello
+          method: get
+      - s3:
+          bucket: myBucket
+          event: s3:ObjectCreated:*
+      - s3:
+          bucket: myBucket
+          event: s3:ObjectRemoved:*
+  hello2:
+    handler: index.hello2
+    events:
+      - httpApi:
+          path: /hello2
+          method: get
+      - sqs:
+          arn:
+            Fn::GetAtt:
+              - MyQueue
+              - Arn
+          batchSize: 10
+          maximumBatchingWindow: 60
+          functionResponseType: ReportBatchItemFailures
+  hello3:
+    handler: index.hello3
+    events:
+      - httpApi:
+          path: /hello3
+          method: get
+      - sns:
+          arn: !Ref SuperTopic
+          topicName: MyCustomTopic
+
+resources:
+  Resources:
+    MyQueue:
+      Type: "AWS::SQS::Queue"
+      Properties:
+        QueueName: "tsanghan-ce6-Q"
+    SuperTopic:
+      Type: "AWS::SNS::Topic"
+      Properties:
+        TopicName: "MyCustomTopic"
+
+plugins:
+  - serverless-offline
