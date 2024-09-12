@@ -1,5 +1,5 @@
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: tsanghan-ce6-serverless-app
+service: tsanghan-ce6-mod3-10-node
 
 frameworkVersion: '4'
 
@@ -9,7 +9,7 @@ provider:
   region: ap-southeast-1
   s3:
     myBucket:
-      name: tsanghan-ce6-serverless-s3-bucket
+      name: tsanghan-ce6-serverless-s3-bucket-node
 
 functions:
   hello:
@@ -46,18 +46,18 @@ functions:
           method: get
       - sns:
           arn: !Ref SuperTopic
-          topicName: MyCustomTopic
+          topicName: MyCustomTopic-node
 
 resources:
   Resources:
     MyQueue:
       Type: "AWS::SQS::Queue"
       Properties:
-        QueueName: "tsanghan-ce6-Q"
+        QueueName: "tsanghan-ce6-Q-node"
     SuperTopic:
       Type: "AWS::SNS::Topic"
       Properties:
-        TopicName: "MyCustomTopic"
+        TopicName: "MyCustomTopic-node"
 
 plugins:
   - serverless-offline
