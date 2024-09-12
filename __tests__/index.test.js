@@ -1,6 +1,6 @@
-// functions.test.js
+// index.test.js
 
-const { hello, hello2, hello3 } = require('../index'); // Adjust the path to where your functions are defined
+const { hello, hello2, hello3 } = require('../index');
 
 describe('Test hello functions', () => {
 
