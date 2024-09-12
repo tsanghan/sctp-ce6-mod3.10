@@ -27,7 +27,7 @@ jobs:
     needs: install-dependencies
     steps:
       - name: Check out repository code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Run Scanning of Dependencies Commands
         run: npm audit
 
