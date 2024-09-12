@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "serverless-offline": "^13.8.0",
     "supertest": "^7.0.0"
   }
 }
