@@ -1,7 +1,14 @@
 {
-  "devDependencies": {
-    "jest": "^29.7.0",
-    "serverless-offline": "^13.8.0",
+  "name": "hello-node-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
     "supertest": "^7.0.0"
   }
 }
