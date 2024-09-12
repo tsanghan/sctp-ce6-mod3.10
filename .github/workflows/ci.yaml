@@ -19,6 +19,8 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Run installation of dependencies commands
+        run: npm install
 
   npm-audit:
     runs-on: ubuntu-latest
@@ -35,5 +37,7 @@ jobs:
       steps:
         - name: Check out repository code
           uses: actions/checkout@v4
+        - name: Run installation of dependencies commands
+          run: npm install
         - name: Run unit testing command
           run: npm test
