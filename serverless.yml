@@ -10,6 +10,8 @@ provider:
   s3:
     myBucket:
       name: tsanghan-ce6-serverless-s3-bucket-node
+  environment:
+    CLASS_NAME: "sctp-ce6"
 
 functions:
   hello:
