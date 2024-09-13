@@ -14,6 +14,12 @@ provider:
     CLASS_NAME: "sctp-ce6"
     SNS_ARN:
       Ref: SuperTopic
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - sns:Publish
+      Resource:
+        Ref: SuperTopic
 
 functions:
   hello:
@@ -28,12 +34,7 @@ functions:
       - s3:
           bucket: myBucket
           event: s3:ObjectRemoved:*
-    iamRoleStatements:
-      - Effect: Allow
-        Action:
-          - sns:Publish
-          - sns:SetSMSAttributes
-        Resource: !Ref SuperTopic
+
   hello2:
     handler: index.hello2
     events:
