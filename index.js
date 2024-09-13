@@ -13,11 +13,14 @@ exports.hello = async (event) => {
         TopicArn: topicArn,
       }),
     );
+    console.log(response);
+  };
   return {
     statusCode: 200,
     body: JSON.stringify({
       message: 'Go Serverless v4.0! Your function executed successfully!',
-      class_name: process.env.CLASS_NAME
+      class_name: process.env.CLASS_NAME,
+      sns_response: publish
     })
   };
 };
