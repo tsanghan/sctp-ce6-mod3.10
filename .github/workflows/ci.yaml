@@ -54,7 +54,7 @@ jobs:
       - name: Run installation of dependencies commands
         run: npm install
       - name: Deploy serverless
-        uses: serverless/github-action@v4
+        uses: serverless/github-action@v3
         with:
           args: deploy
         env:

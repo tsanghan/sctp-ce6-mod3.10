@@ -1,7 +1,7 @@
 # "service" is the name of this project. This will also be added to your AWS resource names.
 service: tsanghan-ce6-mod3-10-node
 
-frameworkVersion: '4'
+frameworkVersion: '3'
 
 provider:
   name: aws
