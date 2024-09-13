@@ -28,6 +28,12 @@ functions:
       - s3:
           bucket: myBucket
           event: s3:ObjectRemoved:*
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - sns:Publish
+          - sns:SetSMSAttributes
+        Resource: !Ref SuperTopic
   hello2:
     handler: index.hello2
     events:
