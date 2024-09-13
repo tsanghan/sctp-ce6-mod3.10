@@ -3,7 +3,10 @@ const snsClient = new SNSClient({ region: "ap-southeast-1" });
 
 
 exports.hello = async (event) => {
-  console.log("*****HELLO*****" + JSON.stringify(event, null, 2))
+  console.log("*****HELLO*****")
+  if(process.env.SNS_ARN == 'undefined') {
+    process.env.SNS_ARN = "arn:aws:sns:ap-southeast-1:255945442255:MyCustomTopic-node"
+  }
   try {
     const eventText = JSON.stringify(event, null, 2);
     const params = {
@@ -32,7 +35,7 @@ exports.hello = async (event) => {
 };
 
 exports.hello2 = async (event) => {
-  console.log("*****HELLO-2*****" + JSON.stringify(event, null, 2))
+  console.log("*****HELLO-2*****")
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -43,7 +46,7 @@ exports.hello2 = async (event) => {
 };
 
 exports.hello3 = async (event) => {
-  console.log("*****HELLO-3*****" + JSON.stringify(event, null, 2))
+  console.log("*****HELLO-3*****")
   return {
     statusCode: 200,
     body: JSON.stringify({
