@@ -1,6 +1,6 @@
 const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
-
 const snsClient = new SNSClient({ region: "ap-southeast-1" });
+
 
 exports.hello = async (event) => {
   console.log("*****HELLO*****")

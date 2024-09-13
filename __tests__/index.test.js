@@ -1,66 +1,92 @@
+// hello.test.js
 const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
-const { hello, hello2, hello3 } = require("../index"); // replace with your actual file name
+const { hello, hello2, hello3 } = require('../index');
 
-jest.mock("@aws-sdk/client-sns");
+// Mock the SNSClient and send method
+jest.mock('@aws-sdk/client-sns', () => {
+  const mockSend = jest.fn();
+  return {
+    SNSClient: jest.fn(() => ({
+      send: mockSend,
+    })),
+    PublishCommand: jest.fn(),
+  };
+});
 
 describe('Lambda Functions', () => {
+  let snsClientMock;
+
   beforeEach(() => {
-    SNSClient.mockClear();
-    PublishCommand.mockClear();
+    snsClientMock = new SNSClient();
+    snsClientMock.send.mockReset();
   });
 
-  describe('hello function', () => {
-    it('should return success response when SNS publish is successful', async () => {
-      const mockSend = jest.fn().mockResolvedValue({ MessageId: '12345' });
-      SNSClient.prototype.send = mockSend;
+  describe('hello', () => {
+    it('should call sent_to_sns with correct parameters', async () => {
+      const mockResponse = { MessageId: '12345' };
+      snsClientMock.send.mockResolvedValue(mockResponse);
 
-      const response = await hello({ key: "value" });
+      process.env.SNS_ARN = 'arn:aws:sns:ap-southeast-1:123456789012:MyTopic';
+      process.env.CLASS_NAME = 'TestClass';
 
-      expect(response.statusCode).toBe(200);
-      expect(JSON.parse(response.body)).toEqual({
-        message: 'Go Serverless v4.0! Your function executed successfully!',
-        class_name: process.env.CLASS_NAME,
-        snsResponse: { MessageId: '12345' }
+      const event = { test: 'data' };
+      const response = await hello(event);
+
+      expect(snsClientMock.send).toHaveBeenCalledWith(expect.any(PublishCommand));
+      expect(snsClientMock.send).toHaveBeenCalledTimes(1);
+      expect(response).toEqual({
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Go Serverless v4.0! Your function executed successfully!',
+          class_name: 'TestClass',
+          snsResponse: mockResponse,
+        }),
       });
-      expect(mockSend).toHaveBeenCalledWith(expect.any(PublishCommand));
     });
 
-    it('should return error response when SNS publish fails', async () => {
-      const mockError = new Error('SNS Error');
-      const mockSend = jest.fn().mockRejectedValue(mockError);
-      SNSClient.prototype.send = mockSend;
+    it('should return an error response if sns publish fails', async () => {
+      snsClientMock.send.mockRejectedValue(new Error('SNS Publish Failed'));
 
-      const response = await hello({ key: "value" });
+      const response = await hello({});
 
-      expect(response.statusCode).toBe(500);
-      expect(JSON.parse(response.body)).toEqual({
-        message: "Error publishing message",
-        error: 'SNS Error',
-      });
-      expect(mockSend).toHaveBeenCalledWith(expect.any(PublishCommand));
-    });
-  });
-
-  describe('hello2 function', () => {
-    it('should return success response', async () => {
-      const response = await hello2({ key: "value" });
-
-      expect(response.statusCode).toBe(200);
-      expect(JSON.parse(response.body)).toEqual({
-        message: 'Go Serverless v4.0! Your function executed successfully! Function 2',
-        class_name: process.env.CLASS_NAME
+      expect(response).toEqual({
+        statusCode: 500,
+        body: JSON.stringify({
+          message: 'Error publishing message',
+          error: 'SNS Publish Failed',
+        }),
       });
     });
   });
 
-  describe('hello3 function', () => {
-    it('should return success response', async () => {
-      const response = await hello3({ key: "value" });
+  describe('hello2', () => {
+    it('should return a successful response for hello2', async () => {
+      process.env.CLASS_NAME = 'TestClass';
 
-      expect(response.statusCode).toBe(200);
-      expect(JSON.parse(response.body)).toEqual({
-        message: 'Go Serverless v4.0! Your function executed successfully! Function 3',
-        class_name: process.env.CLASS_NAME
+      const response = await hello2({});
+
+      expect(response).toEqual({
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Go Serverless v4.0! Your function executed successfully! Function 2',
+          class_name: 'TestClass',
+        }),
+      });
+    });
+  });
+
+  describe('hello3', () => {
+    it('should return a successful response for hello3', async () => {
+      process.env.CLASS_NAME = 'TestClass';
+
+      const response = await hello3({});
+
+      expect(response).toEqual({
+        statusCode: 200,
+        body: JSON.stringify({
+          message: 'Go Serverless v4.0! Your function executed successfully! Function 3',
+          class_name: 'TestClass',
+        }),
       });
     });
   });
