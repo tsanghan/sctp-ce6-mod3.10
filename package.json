@@ -10,8 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "jest": "^29.7.0",
-    "serverless-offline": "^13.8.0",
+    "serverless": "^4.3.2",
     "sinon": "^18.0.1",
     "supertest": "^7.0.0"
+  },
+  "devDependencies": {
+    "serverless-offline": "^13.8.0"
   }
 }
