@@ -12,6 +12,7 @@ provider:
       name: tsanghan-ce6-serverless-s3-bucket-node
   environment:
     CLASS_NAME: "sctp-ce6"
+    SNS_ARN: "arn:aws:sns:ap-southeast-1:255945442255:MyCustomTopic-node"
 
 functions:
   hello:
