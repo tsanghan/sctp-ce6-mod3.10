@@ -8,8 +8,8 @@ exports.hello = async (event) => {
     const eventText = JSON.stringify(event, null, 2);
     const params = {
       Message: eventText,
-      TopicArn: process.env.SNS_ARN,
-      Message: "Hello from SNS!!",
+      Subject: "Test SNS From Lambda",
+      TopicArn: process.env.SNS_ARN
     };
     const data = await snsClient.send(new PublishCommand(params));
     return {
