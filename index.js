@@ -3,7 +3,7 @@ const snsClient = new SNSClient({ region: "ap-southeast-1" });
 
 
 exports.hello = async (event) => {
-  console.log("*****HELLO*****")
+  console.log("*****HELLO*****" + JSON.stringify(event, null, 2))
   try {
     const eventText = JSON.stringify(event, null, 2);
     const params = {
@@ -32,7 +32,7 @@ exports.hello = async (event) => {
 };
 
 exports.hello2 = async (event) => {
-  console.log("*****HELLO-2*****")
+  console.log("*****HELLO-2*****" + JSON.stringify(event, null, 2))
   return {
     statusCode: 200,
     body: JSON.stringify({
@@ -43,7 +43,7 @@ exports.hello2 = async (event) => {
 };
 
 exports.hello3 = async (event) => {
-  console.log("*****HELLO-3*****")
+  console.log("*****HELLO-3*****" + JSON.stringify(event, null, 2))
   return {
     statusCode: 200,
     body: JSON.stringify({
