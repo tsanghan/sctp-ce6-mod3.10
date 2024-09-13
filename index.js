@@ -1,19 +1,34 @@
+const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
+
+const snsClient = new SNSClient({ region: "ap-southeast-1" });
+
 exports.hello = async (event) => {
   console.log("*****HELLO*****")
-  const sns = new aws.SNS({ region: 'ap-southeast-1' });
-  const payload = JSON.stringify({ message: "Hello from SNS!" });
-  await sns.publish({
-    Subject: 'My Subject',
-    Message: payload,
-    TargetArn: 'arn:aws:sns:ap-southeast-1:255945442255:MyCustomTopic-node',
-  })
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v4.0! Your function executed successfully!',
-      class_name: process.env.CLASS_NAME,
-    })
-  };
+  try {
+    const eventText = JSON.stringify(event, null, 2);
+    const input = {
+      Message: eventText,
+      TopicArn: process.env.SNS_ARN,
+      Message: "Hello from SNS!!",
+    };
+    const data = await snsClient.send(new PublishCommand(params));
+    return {
+      statusCode: 200,
+      body: JSON.stringify({
+        message: 'Go Serverless v4.0! Your function executed successfully!',
+        class_name: process.env.CLASS_NAME,
+        snsResponse: data
+      })
+    };
+  } catch (err) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({
+        message: "Error publishing message",
+        error: err.message,
+      }),
+    };
+  }
 };
 
 exports.hello2 = async (event) => {
