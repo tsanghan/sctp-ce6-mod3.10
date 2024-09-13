@@ -6,7 +6,7 @@ exports.hello = async (event) => {
   console.log("*****HELLO*****")
   try {
     const eventText = JSON.stringify(event, null, 2);
-    const input = {
+    const param = {
       Message: eventText,
       TopicArn: process.env.SNS_ARN,
       Message: "Hello from SNS!!",
