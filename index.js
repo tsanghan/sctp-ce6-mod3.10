@@ -1,57 +1,57 @@
 const { SNSClient, PublishCommand } = require("@aws-sdk/client-sns");
-const snsClient = new SNSClient({ region: "ap-southeast-1" });
 
+const REGION = "ap-southeast-1";
+const DEFAULT_SNS_ARN = "arn:aws:sns:ap-southeast-1:255945442255:MyCustomTopic-node";
+const snsClient = new SNSClient({ region: REGION });
 
-exports.hello = async (event) => {
-  console.log("*****HELLO*****")
-  if(process.env.SNS_ARN == 'undefined') {
-    process.env.SNS_ARN = "arn:aws:sns:ap-southeast-1:255945442255:MyCustomTopic-node"
-  }
+// Initialize environment variables
+const initializeEnv = () => {
+  process.env.SNS_ARN = process.env.SNS_ARN || DEFAULT_SNS_ARN;
+  process.env.CLASS_NAME = process.env.CLASS_NAME || "DefaultClassName";
+};
+
+// Utility function to create standard responses
+const createResponse = (statusCode, message, additionalData = {}) => ({
+  statusCode,
+  body: JSON.stringify({
+    message,
+    class_name: process.env.CLASS_NAME,
+    ...additionalData,
+  }),
+});
+
+// Function to send SNS message
+const sendSnsMessage = async (params) => {
   try {
-    const eventText = JSON.stringify(event, null, 2);
-    const params = {
-      Message: eventText,
-      Subject: "Test SNS From Lambda",
-      TopicArn: process.env.SNS_ARN
-    };
     const data = await snsClient.send(new PublishCommand(params));
-    return {
-      statusCode: 200,
-      body: JSON.stringify({
-        message: 'Go Serverless v4.0! Your function executed successfully!',
-        class_name: process.env.CLASS_NAME,
-        snsResponse: data
-      })
-    };
+    return createResponse(200, 'Go Serverless v4.0! Your function executed successfully!', { snsResponse: data });
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({
-        message: "Error publishing message",
-        error: err.message,
-      }),
-    };
+    return createResponse(500, 'Error publishing message', { error: err.message });
   }
 };
 
-exports.hello2 = async (event) => {
-  console.log("*****HELLO-2*****")
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v4.0! Your function executed successfully! Function 2',
-      class_name: process.env.CLASS_NAME
-    })
+// Lambda handler functions
+exports.hello = async (event) => {
+  initializeEnv();
+  console.log("*****HELLO*****");
+
+  const params = {
+    Message: JSON.stringify(event, null, 2),
+    Subject: "Test SNS From Lambda",
+    TopicArn: process.env.SNS_ARN,
   };
+
+  return sendSnsMessage(params);
 };
 
-exports.hello3 = async (event) => {
-  console.log("*****HELLO-3*****")
-  return {
-    statusCode: 200,
-    body: JSON.stringify({
-      message: 'Go Serverless v4.0! Your function executed successfully! Function 3',
-      class_name: process.env.CLASS_NAME
-    })
-  };
+exports.hello2 = async () => {
+  initializeEnv();
+  console.log("*****HELLO-2*****");
+  return createResponse(200, 'Go Serverless v4.0! Your function executed successfully! Function 2');
+};
+
+exports.hello3 = async () => {
+  initializeEnv();
+  console.log("*****HELLO-3*****");
+  return createResponse(200, 'Go Serverless v4.0! Your function executed successfully! Function 3');
 };
