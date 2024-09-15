@@ -4,6 +4,7 @@ run-name: ${{ github.actor }} is doing CICD for Serverless Application
 on:
   push:
     branches:  [ main, "*"]
+  workflow_dispatch:
 
 env:
   AWS_REGION: ap-southeast-1

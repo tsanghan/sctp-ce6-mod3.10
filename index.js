@@ -44,13 +44,13 @@ exports.hello = async (event) => {
   return sendSnsMessage(params);
 };
 
-exports.hello2 = async () => {
+exports.hello2 = async (event) => {
   initializeEnv();
   console.log("*****HELLO-2*****");
   return createResponse(200, 'Go Serverless v4.0! Your function executed successfully! Function 2');
 };
 
-exports.hello3 = async () => {
+exports.hello3 = async (event) => {
   initializeEnv();
   console.log("*****HELLO-3*****");
   return createResponse(200, 'Go Serverless v4.0! Your function executed successfully! Function 3');
