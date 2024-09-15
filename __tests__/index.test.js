@@ -53,6 +53,7 @@ describe('Lambda Functions', () => {
         statusCode: 500,
         body: JSON.stringify({
           message: 'Error publishing message',
+          class_name: process.env.CLASS_NAME,
           error: 'SNS Publish Failed',
         }),
       });
