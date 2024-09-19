@@ -1,5 +1,7 @@
 # SCTP Mod3.10 GitHub Workflow with Unit Test - Node
 
+[![CICD for Serverless Application](https://github.com/tsanghan/sctp-ce6-mod3.10/actions/workflows/ci.yaml/badge.svg)](https://github.com/tsanghan/sctp-ce6-mod3.10/actions/workflows/ci.yaml)
+
 This Repo is exercise for SCTP Mod3.10 on 12th September 2024.
 
 This include a simple Serverless Node Application, with GitHub Worflow and Unit Testing.
